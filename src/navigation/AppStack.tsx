@@ -1,8 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import type { AppStackParamList } from '../types/navigation';
-
-const DashboardScreen = () => null;
+import DashboardScreen from '../screens/dashboard/DashboardScreen';
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
 
