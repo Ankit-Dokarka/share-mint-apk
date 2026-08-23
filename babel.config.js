@@ -12,6 +12,5 @@ module.exports = {
         allowUndefined: true,
       },
     ],
-    'react-native-vector-icons/plugin',
   ],
 };
