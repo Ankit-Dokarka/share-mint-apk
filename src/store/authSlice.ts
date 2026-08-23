@@ -88,6 +88,30 @@ export const logoutUser = createAsyncThunk<void, void>(
   },
 );
 
+export const verifyEmail = createAsyncThunk<
+  MessageResponse,
+  { email: string; otp: string }
+>('auth/verifyEmail', async (data, { rejectWithValue }) => {
+  try {
+    const response = await authAPI.verifyEmail(data.email, data.otp);
+    return response;
+  } catch (error) {
+    return rejectWithValue(getFriendlyError(error));
+  }
+});
+
+export const resendOTP = createAsyncThunk<MessageResponse, string>(
+  'auth/resendOTP',
+  async (email, { rejectWithValue }) => {
+    try {
+      const response = await authAPI.resendOTP(email);
+      return response;
+    } catch (error) {
+      return rejectWithValue(getFriendlyError(error));
+    }
+  },
+);
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -148,6 +172,22 @@ const authSlice = createSlice({
       .addCase(logoutUser.fulfilled, state => {
         state.status = 'unauthenticated';
         state.user = null;
+      })
+      .addCase(verifyEmail.pending, state => {
+        state.status = 'loading';
+        state.error = '';
+      })
+      .addCase(verifyEmail.fulfilled, state => {
+        state.status = 'unauthenticated';
+        state.error = '';
+      })
+      .addCase(verifyEmail.rejected, (state, action) => {
+        state.status = 'unauthenticated';
+        state.error = action.payload as string;
+      })
+
+      .addCase(resendOTP.rejected, (state, action) => {
+        state.error = action.payload as string;
       });
   },
 });

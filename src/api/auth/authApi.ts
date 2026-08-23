@@ -29,14 +29,14 @@ export const authAPI = {
     }),
 
   verifyEmail: (email: string, otp: string) =>
-    apiRequest<AuthResponse>({
+    apiRequest<MessageResponse>({
       method: 'POST',
       url: '/api/auth/verify-otp',
       data: { email, otp },
     }),
 
   resendOTP: (email: string) =>
-    apiRequest<AuthResponse>({
+    apiRequest<MessageResponse>({
       method: 'POST',
       url: '/api/auth/resend-otp',
       data: { email },
