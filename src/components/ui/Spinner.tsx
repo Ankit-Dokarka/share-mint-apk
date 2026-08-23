@@ -1,10 +1,11 @@
 import React from 'react';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
+import { lightTheme } from '../../theme/theme';
 
 export const Spinner = () => {
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="large" color="#10b981" />
+      <ActivityIndicator size="large" color={lightTheme.colors.primary} />
     </View>
   );
 };
