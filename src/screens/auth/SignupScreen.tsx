@@ -40,7 +40,6 @@ export default function SignupScreen() {
       return;
     }
 
-    // Dispatch register, then navigate to VerifyEmail on success
     dispatch(registerUser({ fullName, email, password }))
       .unwrap()
       .then(() => {

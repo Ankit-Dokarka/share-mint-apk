@@ -14,7 +14,7 @@ export const AppNavigator = () => {
     dispatch(checkAuth());
   }, [dispatch]);
 
-  if (status === 'idle' || status === 'loading') {
+  if (status === 'idle') {
     return <Spinner />;
   }
 
