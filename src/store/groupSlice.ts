@@ -1,0 +1,51 @@
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { groupAPI } from '../api/groups/groupApi';
+import { getFriendlyError } from '../utils/getFriendlyError';
+import type { Group } from '../types/group';
+
+interface GroupState {
+  groups: Group[];
+  isLoading: boolean;
+  error: string | null;
+}
+
+const initialState: GroupState = {
+  groups: [],
+  isLoading: false,
+  error: null,
+};
+
+export const fetchGroups = createAsyncThunk<Group[], void>(
+  'group/fetchGroups',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await groupAPI.getGroups();
+      return response.groups;
+    } catch (error) {
+      return rejectWithValue(getFriendlyError(error));
+    }
+  },
+);
+
+const groupSlice = createSlice({
+  name: 'group',
+  initialState,
+  reducers: {},
+  extraReducers: builder => {
+    builder
+      .addCase(fetchGroups.pending, state => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchGroups.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.groups = action.payload;
+      })
+      .addCase(fetchGroups.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      });
+  },
+});
+
+export default groupSlice.reducer;
