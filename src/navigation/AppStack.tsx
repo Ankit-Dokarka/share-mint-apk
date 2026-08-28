@@ -6,6 +6,7 @@ import type { AppStackParamList } from '../types/navigation';
 import { lightTheme } from '../theme/theme';
 import { Header } from '../components/dashboard/Header';
 import { DashboardTabs } from './DashboardTabs';
+import GroupDetailsScreen from '../screens/dashboard/GroupDetailsScreen';
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
 
@@ -15,6 +16,7 @@ export const AppStack = () => {
       <Header />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Dashboard" component={DashboardTabs} />
+        <Stack.Screen name="GroupDetails" component={GroupDetailsScreen} />
       </Stack.Navigator>
     </SafeAreaView>
   );

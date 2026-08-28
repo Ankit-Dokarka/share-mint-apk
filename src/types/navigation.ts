@@ -9,6 +9,7 @@ export type AuthStackParamList = {
 export type AppStackParamList = {
   Dashboard: undefined;
   Profile: undefined;
+  GroupDetails: { groupId: string };
 };
 
 export type RootStackParamList = AuthStackParamList & AppStackParamList;

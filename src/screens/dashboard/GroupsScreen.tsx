@@ -6,7 +6,6 @@ import {
   FlatList,
   Pressable,
   ActivityIndicator,
-  Alert,
 } from 'react-native';
 import Feather from '@react-native-vector-icons/feather';
 import { lightTheme } from '../../theme/theme';
@@ -14,58 +13,65 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchGroups } from '../../store/groupSlice';
 import { AddGroupModal } from '../../components/dashboard/modals/AddGroupModal';
 import type { Group } from '../../types/group';
+import { useNavigation } from '@react-navigation/native';
+import type { AppNavProp } from '../../types/navigation';
 
-const GroupCard = ({ group }: { group: Group }) => (
-  <Pressable
-    style={styles.groupCard}
-    onPress={() => Alert.alert('Navigate to Group Details')}
-  >
-    <View style={styles.cardTopRow}>
-      <View style={styles.groupIconContainer}>
-        <Feather name="users" size={20} color={lightTheme.colors.primary} />
+const GroupCard = ({ group }: { group: Group }) => {
+  const navigation = useNavigation<AppNavProp>();
+  return (
+    <Pressable
+      style={styles.groupCard}
+      onPress={() =>
+        navigation.navigate('GroupDetails', { groupId: group._id })
+      }
+    >
+      <View style={styles.cardTopRow}>
+        <View style={styles.groupIconContainer}>
+          <Feather name="users" size={20} color={lightTheme.colors.primary} />
+        </View>
+        <Feather
+          name="arrow-right"
+          size={18}
+          color={lightTheme.colors.textSoft}
+        />
       </View>
-      <Feather
-        name="arrow-right"
-        size={18}
-        color={lightTheme.colors.textSoft}
-      />
-    </View>
 
-    <View style={styles.cardMiddle}>
-      <Text style={styles.groupName} numberOfLines={1}>
-        {group.name}
-      </Text>
-      <Text style={styles.groupMembers}>
-        {group.members.length}{' '}
-        {group.members.length === 1 ? 'member' : 'members'}
-      </Text>
-    </View>
+      <View style={styles.cardMiddle}>
+        <Text style={styles.groupName} numberOfLines={1}>
+          {group.name}
+        </Text>
+        <Text style={styles.groupMembers}>
+          {group.members.length}{' '}
+          {group.members.length === 1 ? 'member' : 'members'}
+        </Text>
+      </View>
 
-    <View style={styles.cardBottomRow}>
-      <View style={styles.avatarStack}>
-        {group.members.slice(0, 4).map((member, index) => (
-          <View
-            key={member._id}
-            style={index === 0 ? styles.avatarFirst : styles.avatar}
-          >
-            <Text style={styles.avatarText}>
-              {member.fullName?.[0]?.toUpperCase() || 'U'}
-            </Text>
-          </View>
-        ))}
-        {group.members.length > 4 && (
-          <View style={styles.avatarOverflow}>
-            <Text style={styles.avatarText}>+{group.members.length - 4}</Text>
-          </View>
-        )}
+      <View style={styles.cardBottomRow}>
+        <View style={styles.avatarStack}>
+          {group.members.slice(0, 4).map((member, index) => (
+            <View
+              key={member._id}
+              style={index === 0 ? styles.avatarFirst : styles.avatar}
+            >
+              <Text style={styles.avatarText}>
+                {member.fullName?.[0]?.toUpperCase() || 'U'}
+              </Text>
+            </View>
+          ))}
+          {group.members.length > 4 && (
+            <View style={styles.avatarOverflow}>
+              <Text style={styles.avatarText}>+{group.members.length - 4}</Text>
+            </View>
+          )}
+        </View>
+        <View>
+          <Text style={styles.balancesLabel}>BALANCES</Text>
+          <Text style={styles.viewDetailsText}>View details</Text>
+        </View>
       </View>
-      <View>
-        <Text style={styles.balancesLabel}>BALANCES</Text>
-        <Text style={styles.viewDetailsText}>View details</Text>
-      </View>
-    </View>
-  </Pressable>
-);
+    </Pressable>
+  );
+};
 
 const StateMessage = ({
   isError,
