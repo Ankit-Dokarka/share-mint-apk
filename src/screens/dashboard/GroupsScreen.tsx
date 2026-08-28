@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import Feather from '@react-native-vector-icons/feather';
 import { lightTheme } from '../../theme/theme';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchGroups } from '../../store/groupSlice';
+import { AddGroupModal } from '../../components/dashboard/modals/AddGroupModal';
 import type { Group } from '../../types/group';
 
 const GroupCard = ({ group }: { group: Group }) => (
@@ -102,13 +103,18 @@ const StateMessage = ({
 export default function GroupsScreen() {
   const dispatch = useAppDispatch();
   const { groups, isLoading, error } = useAppSelector(state => state.group);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchGroups());
   }, [dispatch]);
 
   const handleCreatePress = useCallback(() => {
-    Alert.alert('Coming Soon', 'Create group modal is not implemented yet.');
+    setIsCreateOpen(true);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setIsCreateOpen(false);
   }, []);
 
   if (isLoading && groups.length === 0) {
@@ -123,7 +129,7 @@ export default function GroupsScreen() {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <View>
+          <View style={styles.headerTextContainer}>
             <Text style={styles.headerTitle}>Groups</Text>
             <Text style={styles.headerSubtitle}>
               Create shared spaces and track every amount to pay or to receive.
@@ -186,6 +192,8 @@ export default function GroupsScreen() {
           renderItem={({ item }) => <GroupCard group={item} />}
         />
       )}
+
+      <AddGroupModal isVisible={isCreateOpen} onClose={handleCloseModal} />
     </View>
   );
 }

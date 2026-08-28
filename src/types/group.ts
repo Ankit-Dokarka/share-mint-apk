@@ -14,3 +14,14 @@ export interface GroupsResponse {
   success: boolean;
   groups: Group[];
 }
+
+export interface User {
+  _id: string;
+  fullName: string;
+  email: string;
+}
+
+export interface CreateGroupPayload {
+  name: string;
+  members: string[];
+}
