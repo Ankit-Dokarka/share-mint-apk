@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import type { AppStackParamList } from '../types/navigation';
 import { lightTheme } from '../theme/theme';
@@ -10,14 +11,12 @@ const Stack = createNativeStackNavigator<AppStackParamList>();
 
 export const AppStack = () => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <Header />
-      <View style={styles.content}>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Dashboard" component={DashboardTabs} />
-        </Stack.Navigator>
-      </View>
-    </View>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Dashboard" component={DashboardTabs} />
+      </Stack.Navigator>
+    </SafeAreaView>
   );
 };
 
@@ -25,8 +24,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: lightTheme.colors.bg,
-  },
-  content: {
-    flex: 1,
   },
 });
