@@ -6,7 +6,6 @@ import {
   ScrollView,
   Pressable,
   ActivityIndicator,
-  Alert,
 } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import type { RouteProp } from '@react-navigation/native';
@@ -17,6 +16,7 @@ import { fetchGroupDetails } from '../../store/expenseSlice';
 import type { AppStackParamList } from '../../types/navigation';
 import type { Expense, Balance } from '../../types/expense';
 import { AddExpenseModal } from '../../components/dashboard/modals/AddExpenseModal';
+import { SettleUpModal } from '../../components/dashboard/modals/SettleUpModal';
 
 type GroupDetailsRouteProp = RouteProp<AppStackParamList, 'GroupDetails'>;
 
@@ -94,6 +94,7 @@ export default function GroupDetailsScreen() {
     error,
   } = useAppSelector(state => state.expense);
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
+  const [isSettleUpOpen, setIsSettleUpOpen] = useState(false);
 
   const group = useMemo(
     () => groups.find(g => g._id === groupId),
@@ -121,7 +122,7 @@ export default function GroupDetailsScreen() {
   }, []);
 
   const handleSettleUp = useCallback(() => {
-    Alert.alert('Coming Soon', 'Settle Up modal is not implemented yet.');
+    setIsSettleUpOpen(true);
   }, []);
 
   const isOverallLoading =
@@ -325,14 +326,25 @@ export default function GroupDetailsScreen() {
         </View>
       )}
       {group && (
-        <AddExpenseModal
-          isVisible={isAddExpenseOpen}
-          onClose={() => setIsAddExpenseOpen(false)}
-          group={group}
-          onCreated={() => {
-            dispatch(fetchGroupDetails(groupId));
-          }}
-        />
+        <>
+          <AddExpenseModal
+            isVisible={isAddExpenseOpen}
+            onClose={() => setIsAddExpenseOpen(false)}
+            group={group}
+            onCreated={() => {
+              dispatch(fetchGroupDetails(groupId));
+            }}
+          />
+          <SettleUpModal
+            isVisible={isSettleUpOpen}
+            onClose={() => setIsSettleUpOpen(false)}
+            groupId={group._id}
+            balances={balances}
+            onSettled={() => {
+              dispatch(fetchGroupDetails(groupId));
+            }}
+          />
+        </>
       )}
     </ScrollView>
   );
