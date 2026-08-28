@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useCallback } from 'react';
+import React, { useEffect, useMemo, useCallback, useState } from 'react';
 import {
   View,
   Text,
@@ -16,6 +16,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchGroupDetails } from '../../store/expenseSlice';
 import type { AppStackParamList } from '../../types/navigation';
 import type { Expense, Balance } from '../../types/expense';
+import { AddExpenseModal } from '../../components/dashboard/modals/AddExpenseModal';
 
 type GroupDetailsRouteProp = RouteProp<AppStackParamList, 'GroupDetails'>;
 
@@ -92,6 +93,7 @@ export default function GroupDetailsScreen() {
     isLoading: isLoadingExpenses,
     error,
   } = useAppSelector(state => state.expense);
+  const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
 
   const group = useMemo(
     () => groups.find(g => g._id === groupId),
@@ -115,7 +117,7 @@ export default function GroupDetailsScreen() {
   );
 
   const handleAddExpense = useCallback(() => {
-    Alert.alert('Coming Soon', 'Add Expense modal is not implemented yet.');
+    setIsAddExpenseOpen(true);
   }, []);
 
   const handleSettleUp = useCallback(() => {
@@ -321,6 +323,16 @@ export default function GroupDetailsScreen() {
             ))}
           </View>
         </View>
+      )}
+      {group && (
+        <AddExpenseModal
+          isVisible={isAddExpenseOpen}
+          onClose={() => setIsAddExpenseOpen(false)}
+          group={group}
+          onCreated={() => {
+            dispatch(fetchGroupDetails(groupId));
+          }}
+        />
       )}
     </ScrollView>
   );

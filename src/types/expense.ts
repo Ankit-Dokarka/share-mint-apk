@@ -23,3 +23,14 @@ export interface GroupExpensesResponse {
   expenses: Expense[];
   balances: Balance[];
 }
+
+export interface CreateExpensePayload {
+  title: string;
+  description?: string;
+  amount: number;
+  groupId: string;
+  paidBy: string;
+  splitType: string;
+  participants: { user: string }[];
+  expenseDate: string;
+}
